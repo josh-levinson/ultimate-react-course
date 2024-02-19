@@ -142,3 +142,46 @@ function getBooks() {
 function getBook(id) {
   return data.find((d) => d.id === id);
 }
+
+// destructuring
+
+/*
+const books = data;
+const book = getBook(1);
+book;
+
+const { title, author, pages, publicationDate, genres, hasMovieAdaptation } =
+  book;
+
+genres;
+const [primary, secondary, ...other] = genres;
+console.log(primary, secondary, other);
+
+const newGenres = [...genres, "epic"];
+newGenres;
+
+const updatedBook = { ...book, moviePublicationDate: "2001-12-19" };
+updatedBook;
+
+const pagesAllBooks = books.reduce((acc, book) => acc + book.pages, 0);
+pagesAllBooks;
+
+
+
+fetch("https://jsonplaceholder.typicode.com/todos")
+  .then((res) => res.json())
+  .then((data) => console.log(data));
+
+console.log("jonas");
+
+*/
+
+const todosUrl = "https://jsonplaceholder.typicode.com/todos";
+async function getTodos() {
+  const res = await fetch(todosUrl);
+  const data = await res.json();
+  console.log(data);
+}
+getTodos();
+
+console.log("hi");
