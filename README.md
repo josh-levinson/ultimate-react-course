@@ -1,3 +1,7 @@
+# What is this?
+
+This is a fork of Jonas Schmedtmann's Ultimate React course that I'm learning. I just forked the whole thing into my repo and worked on it. It's not mine. I just wanted to be clear in case someone showed up and is like bro are you stealing????
+
 # Course Material and FAQ for the Ultimate React Course
 
 This branch of the repo contains starter files and final code for all sections and projects of the course, **exactly as shown in the videos**.
