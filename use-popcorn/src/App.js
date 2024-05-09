@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const tempMovieData = [
   {
@@ -50,9 +50,44 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+const KEY = "c8bc91bd";
+
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const query = "asfd";
+
+  useEffect(function () {
+    async function fetchMovies() {
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+        );
+
+        if (!res.ok) {
+          throw new Error("Something wrong with with fetching movies");
+        }
+        const data = await res.json();
+
+        if (data.Response === "False") {
+          throw new Error("No results found");
+        }
+
+        setMovies(data.Search);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err.message);
+        setIsLoading(false);
+        setError(err.message);
+      }
+    }
+
+    fetchMovies();
+  }, []);
 
   return (
     <>
@@ -63,7 +98,9 @@ export default function App() {
       </NavBar>
       <Main>
         <Box>
-          <MovieList movies={movies} />
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MovieList movies={movies} />}
+          {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
@@ -74,12 +111,21 @@ export default function App() {
   );
 }
 
-function NavBar({ children }) {
+function Loader() {
+  return <p className="loader">Loading...</p>;
+}
+
+function ErrorMessage({ message }) {
   return (
-    <nav className="nav-bar">
-      {children}
-    </nav>
+    <p className="error">
+      <span>⛔</span>
+      {message}
+    </p>
   );
+}
+
+function NavBar({ children }) {
+  return <nav className="nav-bar">{children}</nav>;
 }
 
 function Logo() {
@@ -114,11 +160,7 @@ function NumResults({ movies }) {
 }
 
 function Main({ children }) {
-  return (
-    <main className="main">
-      {children}
-    </main>
-  );
+  return <main className="main">{children}</main>;
 }
 
 function Box({ children }) {
@@ -126,10 +168,7 @@ function Box({ children }) {
 
   return (
     <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen((open) => !open)}
-      >
+      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
         {isOpen ? "–" : "+"}
       </button>
       {isOpen && children}
@@ -137,12 +176,14 @@ function Box({ children }) {
   );
 }
 
-function MovieList({ movies }) {
+function MovieList({ movies, isLoading }) {
   return (
     <ul className="list">
-      {movies?.map((movie) => (
-        <Movie movie={movie} key={movie.imdbID} />
-      ))}
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        movies?.map((movie) => <Movie movie={movie} key={movie.imdbID} />)
+      )}
     </ul>
   );
 }
