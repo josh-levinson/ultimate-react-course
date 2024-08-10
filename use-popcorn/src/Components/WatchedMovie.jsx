@@ -2,7 +2,7 @@ export default function WatchedMovie({ movie }) {
   return (
     <li>
       <img src={movie.poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+      <h3>{movie.title}</h3>
       <div>
         <p>
           <span>⭐️</span>
