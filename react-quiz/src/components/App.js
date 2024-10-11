@@ -3,6 +3,7 @@ import Error from "./Error";
 import Header from "./Header";
 import Loader from "./Loader";
 import Main from "./Main";
+import NextButton from "./NextButton";
 import Question from "./Question";
 import StartScreen from "./StartScreen";
 
@@ -12,7 +13,9 @@ const initialState = {
   status: "loading",
   index: 0,
   answer: null,
+  points: 0,
 };
+
 function reducer(state, action) {
   switch (action.type) {
     case "dataReceived":
@@ -32,9 +35,21 @@ function reducer(state, action) {
         status: "active",
       };
     case "newAnswer":
+      const question = state.questions.at(state.index);
+
       return {
         ...state,
         answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
+    case "nextQuestion":
+      return {
+        ...state,
+        answer: null,
+        index: state.index + 1,
       };
     default:
       throw new Error("Action unknown");
@@ -66,11 +81,14 @@ export default function App() {
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
         {status === "active" && (
-          <Question
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-          />
+          <>
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
+            <NextButton dispatch={dispatch} answer={answer} />
+          </>
         )}
       </Main>
     </div>
