@@ -1,11 +1,13 @@
 import { useEffect, useReducer } from "react";
 import Error from "./Error";
+import FinishScreen from "./FinishScreen";
 import Header from "./Header";
 import Loader from "./Loader";
 import Main from "./Main";
 import NextButton from "./NextButton";
 import Question from "./Question";
 import StartScreen from "./StartScreen";
+import Progress from "./Progress";
 
 const initialState = {
   questions: [],
@@ -51,18 +53,27 @@ function reducer(state, action) {
         answer: null,
         index: state.index + 1,
       };
+    case "finish":
+      return {
+        ...state,
+        status: "finished",
+      };
     default:
       throw new Error("Action unknown");
   }
 }
 
 export default function App() {
-  const [{ questions, status, index, answer }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
     reducer,
     initialState
   );
 
   const numQuestions = questions.length;
+  const maxPossiblePoints = questions.reduce(
+    (prev, cur) => prev + cur.points,
+    0
+  );
 
   useEffect(() => {
     fetch("http://localhost:8000/questions")
@@ -82,13 +93,28 @@ export default function App() {
         )}
         {status === "active" && (
           <>
+            <Progress
+              index={index}
+              numQuestions={numQuestions}
+              points={points}
+              maxPossiblePoints={maxPossiblePoints}
+              answer={answer}
+            />
             <Question
               question={questions[index]}
               dispatch={dispatch}
               answer={answer}
             />
-            <NextButton dispatch={dispatch} answer={answer} />
+            <NextButton
+              dispatch={dispatch}
+              answer={answer}
+              index={index}
+              numQuestions={numQuestions}
+            />
           </>
+        )}
+        {status === "finished" && (
+          <FinishScreen points={points} maxPossiblePoints={maxPossiblePoints} />
         )}
       </Main>
     </div>
