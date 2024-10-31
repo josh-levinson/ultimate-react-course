@@ -1,4 +1,4 @@
-export default function StartScreen({ numQuestions, dispatch }) {
+function StartScreen({ numQuestions, dispatch }) {
   return (
     <div className="start">
       <h2>Welcome to the React Quiz!</h2>
@@ -12,3 +12,5 @@ export default function StartScreen({ numQuestions, dispatch }) {
     </div>
   );
 }
+
+export default StartScreen;
