@@ -1,6 +1,7 @@
 import { useEffect, useReducer } from "react";
 import Error from "./Error";
 import FinishScreen from "./FinishScreen";
+import Footer from "./Footer";
 import Header from "./Header";
 import Loader from "./Loader";
 import Main from "./Main";
@@ -113,12 +114,14 @@ export default function App() {
               dispatch={dispatch}
               answer={answer}
             />
-            <NextButton
-              dispatch={dispatch}
-              answer={answer}
-              index={index}
-              numQuestions={numQuestions}
-            />
+            <Footer>
+              <NextButton
+                dispatch={dispatch}
+                answer={answer}
+                index={index}
+                numQuestions={numQuestions}
+              />
+            </Footer>
           </>
         )}
         {status === "finished" && (
