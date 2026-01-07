@@ -1,4 +1,4 @@
-function Loader() {
+export default function Loader() {
   return (
     <div className="loader-container">
       <div className="loader"></div>
@@ -6,5 +6,3 @@ function Loader() {
     </div>
   );
 }
-
-export default Loader;
