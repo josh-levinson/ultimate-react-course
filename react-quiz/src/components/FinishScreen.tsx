@@ -1,7 +1,14 @@
-function FinishScreen({ dispatch, points, maxPoints, highScore }) {
+type Props = {
+  dispatch: any;
+  points: number;
+  maxPoints: number;
+  highScore: number;
+};
+
+function FinishScreen({ dispatch, points, maxPoints, highScore }: Props) {
   const percentage = (points / maxPoints) * 100;
 
-  let emoji;
+  let emoji: string = "";
   if (percentage === 100) emoji = "🥇";
   if (percentage >= 80 && percentage < 100) emoji = "🎉";
   if (percentage >= 50 && percentage < 80) emoji = "🙃";

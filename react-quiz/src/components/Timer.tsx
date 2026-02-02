@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 
-function Timer({ dispatch, secondsRemaining }) {
+type Props = {
+  dispatch: any;
+  secondsRemaining: number;
+};
+
+function Timer({ dispatch, secondsRemaining }: Props) {
   const mins = Math.floor(secondsRemaining / 60);
   const seconds = secondsRemaining % 60;
 

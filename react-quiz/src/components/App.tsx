@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from "react";
-import Error from "./Error";
+import type { QuizAction, QuizQuestion, QuizState } from "../types";
+import ErrorMessage from "./ErrorMessage";
 import Header from "./Header";
 import Loader from "./Loader";
 import Main from "./Main";
@@ -8,12 +9,12 @@ import Question from "./Question";
 import StartScreen from "./StartScreen";
 import Progress from "./Progress";
 import FinishScreen from "./FinishScreen";
-import Footer from "./Footer.js";
+import Footer from "./Footer";
 import Timer from "./Timer";
 
 const SECS_PER_QUESTION = 30;
 
-const initialState = {
+const initialState: QuizState = {
   questions: [],
   // "loading", "error", "ready", "active", "finished"
   status: "loading",
@@ -23,7 +24,7 @@ const initialState = {
   highScore: 0,
 };
 
-function reducer(state, action) {
+function reducer(state: QuizState, action: QuizAction) {
   switch (action.type) {
     case "dataReceived":
       return {
@@ -89,7 +90,10 @@ export default function App() {
   ] = useReducer(reducer, initialState);
 
   const numQuestions = questions.length;
-  const maxPoints = questions.reduce((prev, curr) => prev + curr.points, 0);
+  const maxPoints = questions.reduce(
+    (prev: number, curr: Question[]) => prev + curr.points,
+    0,
+  );
 
   useEffect(function () {
     fetch("http://localhost:8000/questions")
@@ -103,7 +107,7 @@ export default function App() {
       <Header />
       <Main>
         {status === "loading" && <Loader />}
-        {status === "error" && <Error />}
+        {status === "error" && <ErrorMessage />}
         {status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}

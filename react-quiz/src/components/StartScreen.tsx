@@ -1,4 +1,9 @@
-function StartScreen({ numQuestions, dispatch }) {
+type Props = {
+  numQuestions: number;
+  dispatch: any;
+};
+
+function StartScreen({ numQuestions, dispatch }: Props) {
   return (
     <div>
       <h2>Welcome to the React Quiz</h2>

@@ -1,6 +1,12 @@
 import Options from "./Options";
 
-function Question({ question, dispatch, answer }) {
+type Props = {
+  question: number;
+  dispatch: any;
+  answer: number;
+};
+
+function Question({ question, dispatch, answer }: Props) {
   return (
     <div>
       <h4>{question.question}</h4>
