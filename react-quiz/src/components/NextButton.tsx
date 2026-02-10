@@ -1,4 +1,11 @@
-function NextButton({ dispatch, answer, index, numQuestions }) {
+type Props = {
+  dispatch: any;
+  answer: string;
+  index: number;
+  numQuestions: number;
+};
+
+function NextButton({ dispatch, answer, index, numQuestions }: Props) {
   if (answer == null) return null;
 
   if (index < numQuestions - 1) {

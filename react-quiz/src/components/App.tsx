@@ -75,7 +75,9 @@ function reducer(state: QuizState, action: QuizAction) {
     case "tick":
       return {
         ...state,
-        secondsRemaining: state.secondsRemaining - 1,
+        secondsRemaining: state.secondsRemaining
+          ? state.secondsRemaining - 1
+          : undefined,
         status: state.secondsRemaining === 0 ? "finished" : state.status,
       };
     default:
@@ -91,7 +93,7 @@ export default function App() {
 
   const numQuestions = questions.length;
   const maxPoints = questions.reduce(
-    (prev: number, curr: Question[]) => prev + curr.points,
+    (prev: number, curr: QuizQuestion) => prev + curr.points,
     0,
   );
 
@@ -132,17 +134,19 @@ export default function App() {
               numQuestions={numQuestions}
             />
             <Footer>
-              <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
-              {status === "finished" && (
-                <FinishScreen
-                  dispatch={dispatch}
-                  points={points}
-                  maxPoints={maxPoints}
-                  highScore={highScore}
-                />
+              {typeof secondsRemaining === "number" && (
+                <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
               )}
             </Footer>
           </>
+        )}
+        {status === "finished" && (
+          <FinishScreen
+            dispatch={dispatch}
+            points={points}
+            maxPoints={maxPoints}
+            highScore={highScore}
+          />
         )}
       </Main>
     </div>

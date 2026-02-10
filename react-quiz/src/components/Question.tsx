@@ -1,7 +1,8 @@
+import { QuizQuestion } from "../types";
 import Options from "./Options";
 
 type Props = {
-  question: number;
+  question: QuizQuestion;
   dispatch: any;
   answer: number;
 };
